@@ -1,0 +1,17 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/nedvizhimost-za-rubezhom1",
+      "destination": "/international-real-estate",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/international-real-estate",
+      "destination": "/international-real-estate.html"
+    }
+  ]
+}

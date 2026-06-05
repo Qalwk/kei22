@@ -1,0 +1,189 @@
+form[data-kei22-form],
+form[data-kei22-form] * {
+  box-sizing: border-box;
+}
+
+form[data-kei22-form] {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 34px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+}
+
+form[data-kei22-form] .t-form__inputsbox {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px !important;
+}
+
+form[data-kei22-form] .t-input-group {
+  display: block !important;
+  float: none !important;
+  clear: both !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+form[data-kei22-form] .t-input-group[data-field-name=""] {
+  display: none !important;
+}
+
+form[data-kei22-form] .t-input-title {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  color: #111 !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.25 !important;
+  text-align: left !important;
+}
+
+form[data-kei22-form] .t-input-block {
+  display: block !important;
+  position: relative;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+form[data-kei22-form] .t-input,
+form[data-kei22-form] textarea {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  color: #111 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  border-radius: 12px !important;
+  font-size: 16px !important;
+  line-height: 58px !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+form[data-kei22-form] textarea {
+  height: 128px !important;
+  min-height: 128px !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  line-height: 1.4 !important;
+  resize: vertical;
+}
+
+form[data-kei22-form] .t-input:focus,
+form[data-kei22-form] textarea:focus {
+  border-color: #259da8 !important;
+  box-shadow: 0 0 0 4px rgba(37, 157, 168, 0.14) !important;
+}
+
+form[data-kei22-form] .t-input-group_ph .t-input-block {
+  display: flex !important;
+  align-items: center !important;
+  height: 58px !important;
+  min-height: 58px !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  border-radius: 12px !important;
+}
+
+form[data-kei22-form] .t-input-group_ph .t-input-block:focus-within {
+  border-color: #259da8 !important;
+  box-shadow: 0 0 0 4px rgba(37, 157, 168, 0.14) !important;
+}
+
+form[data-kei22-form] .t-input-group_ph .t-input-block > *:not(input) {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  height: 100% !important;
+}
+
+form[data-kei22-form] .t-input-group_ph input[type="tel"] {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  padding: 0 18px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  line-height: 58px !important;
+  box-shadow: none !important;
+}
+
+form[data-kei22-form] .t-form__submit {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+form[data-kei22-form] .t-submit {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 60px !important;
+  min-height: 60px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  background: #259da8 !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+form[data-kei22-form] .t-submit style {
+  display: none !important;
+}
+
+form[data-kei22-form] .t-submit .t-btnflex__text {
+  display: block !important;
+}
+
+form[data-kei22-form] .t-submit:hover {
+  background: #1f8d97 !important;
+}
+
+form[data-kei22-form] .t-submit:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+form[data-kei22-form] .t-input-error {
+  margin-top: 6px !important;
+}
+
+form[data-kei22-form] .t-form__successbox,
+form[data-kei22-form] .t-form__errorbox-wrapper {
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  border-radius: 12px;
+}
+
+@media screen and (max-width: 640px) {
+  form[data-kei22-form] {
+    padding: 22px 16px;
+    border-radius: 14px;
+  }
+
+  form[data-kei22-form] .t-form__inputsbox {
+    gap: 14px !important;
+  }
+}

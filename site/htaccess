@@ -1,0 +1,23 @@
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+DirectoryIndex page51036045.html
+
+RewriteEngine On
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^(.*)$ https://kei22\.com/$1 [R=301,L]
+
+RewriteCond %{HTTP:X-Forwarded-Proto} =https
+RewriteCond %{HTTP_HOST} ^www\.kei22.com [NC]
+RewriteRule ^(.*)$ https://kei22\.com/$1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} /robots.txt
+RewriteCond "%{DOCUMENT_ROOT}/robots_%{HTTP_HOST}.txt" -f
+RewriteRule ^(.*)$ robots_%{HTTP_HOST}.txt [NC,L]
+RewriteRule ^nedvizhimost-za-rubezhom1/?$ /international-real-estate [R=301,L]
+RewriteRule ^nedvizhimost-za-rubezhom/?$ /international-real-estate [R=301,L]
+
+RewriteRule ^international-real-estate/?$ international-real-estate.html [NC,L]
+
+
