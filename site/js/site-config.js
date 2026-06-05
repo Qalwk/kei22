@@ -10,3 +10,12 @@ window.KEI22_FORM_CONFIG = {
   emailValidationMessage: 'Please enter a valid email address.',
   sendingText: 'Sending...'
 };
+
+window.KEI22_LEGAL = {
+  businessName: 'IE Budanova Ekaterina',
+  identificationNo: '345791218',
+  address: 'Georgia, Batumi, Giorgi Leonidze Street No. 4, Apartment 75',
+  email: 'kustovaestatei1182@gmail.com',
+  businessDescription:
+    'International real estate brokerage and consultation services. Property listings on this website are provided for informational purposes only. We do not sell properties directly through this website.'
+};

@@ -187,3 +187,168 @@ form[data-kei22-form] .t-form__errorbox-wrapper {
     gap: 14px !important;
   }
 }
+
+.kei22-legal-footer {
+  background: #0e1b2c;
+  color: rgba(255, 255, 255, 0.88);
+  padding: 36px 20px 42px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.kei22-legal-footer--dark {
+  background: #0a0a0a;
+}
+
+.kei22-legal-footer__inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kei22-legal-footer__name {
+  margin: 0 0 8px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.kei22-legal-footer__business p {
+  margin: 0 0 6px;
+}
+
+.kei22-legal-footer__links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 18px 0 12px;
+}
+
+.kei22-legal-footer__links a {
+  color: #7fd9e2;
+  text-decoration: underline;
+}
+
+.kei22-legal-footer__links a:hover {
+  color: #ffffff;
+}
+
+.kei22-legal-footer__copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+}
+
+.kei22-cookie-consent {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 10000;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.kei22-cookie-consent__inner {
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+
+.kei22-cookie-consent__text {
+  margin: 0 0 14px;
+  color: #222;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.kei22-cookie-consent__text a {
+  color: #259da8;
+}
+
+.kei22-cookie-consent__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.kei22-cookie-consent__btn {
+  min-width: 110px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kei22-cookie-consent__btn--accept {
+  color: #ffffff;
+  background: #259da8;
+}
+
+.kei22-cookie-consent__btn--decline {
+  color: #333;
+  background: #ececec;
+}
+
+.kei22-legal-page {
+  margin: 0;
+  color: #222;
+  background: #f5f5f5;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.kei22-legal-page__header {
+  padding: 28px 20px;
+  background: #0e1b2c;
+  color: #fff;
+}
+
+.kei22-legal-page__header a {
+  color: #7fd9e2;
+  text-decoration: none;
+}
+
+.kei22-legal-page__content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.kei22-legal-page__content h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+}
+
+.kei22-legal-page__content h2 {
+  margin: 28px 0 10px;
+  font-size: 20px;
+}
+
+.kei22-legal-page__content p,
+.kei22-legal-page__content li {
+  line-height: 1.65;
+}
+
+.kei22-legal-page__content ul {
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 640px) {
+  .kei22-cookie-consent {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .kei22-cookie-consent__actions {
+    flex-direction: column;
+  }
+
+  .kei22-cookie-consent__btn {
+    width: 100%;
+  }
+}
