@@ -11,6 +11,10 @@ window.KEI22_FORM_CONFIG = {
   sendingText: 'Sending...'
 };
 
+window.KEI22_TRACKING = {
+  googleAdsId: 'AW-18216688626'
+};
+
 window.KEI22_LEGAL = {
   businessName: 'IE Budanova Ekaterina',
   identificationNo: '345791218',
