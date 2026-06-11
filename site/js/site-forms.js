@@ -1,6 +1,16 @@
 (function () {
   var config = window.KEI22_FORM_CONFIG || {};
+  var tracking = window.KEI22_TRACKING || {};
   var accessKey = config.web3formsAccessKey || '';
+
+  function trackLeadConversion() {
+    var sendTo =
+      tracking.googleAdsConversionSendTo || 'AW-18216688626/grFaCMmgrrwcEPK3su5D';
+
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', { send_to: sendTo });
+    }
+  }
 
   function showSuccess(form) {
     var box = form.querySelector('.js-successbox');
@@ -11,6 +21,7 @@
       }
     }
     form.reset();
+    trackLeadConversion();
   }
 
   function hideErrors(form) {

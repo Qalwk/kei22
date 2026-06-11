@@ -12,7 +12,8 @@ window.KEI22_FORM_CONFIG = {
 };
 
 window.KEI22_TRACKING = {
-  googleAdsId: 'AW-18216688626'
+  googleAdsId: 'AW-18216688626',
+  googleAdsConversionSendTo: 'AW-18216688626/grFaCMmgrrwcEPK3su5D'
 };
 
 window.KEI22_LEGAL = {
