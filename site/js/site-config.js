@@ -1,8 +1,9 @@
+// Web3Forms access key (public): https://web3forms.com/
 // reCAPTCHA v2 site key (public): https://www.google.com/recaptcha/admin
-// Secret key goes to Vercel env: RECAPTCHA_SECRET_KEY
 window.KEI22_FORM_CONFIG = {
+  web3formsAccessKey: '6LcPCTgtAAAAAAC6JdSk9FMamND2yaiU0eOdp-jC',
   recaptchaSiteKey: '6LcPCTgtAAAAAAC6JdSk9FMamND2yaiU0eOdp-jC',
-  submitEndpoint: '/api/submit-form',
+  submitEndpoint: 'https://api.web3forms.com/submit',
   formSubject: 'New property inquiry from kei22.com',
   fromName: 'KEI22 website',
   successMessage: 'Thank you! Your request has been sent. We will contact you shortly.',

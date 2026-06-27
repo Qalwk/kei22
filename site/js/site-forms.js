@@ -2,7 +2,8 @@
   var config = window.KEI22_FORM_CONFIG || {};
   var tracking = window.KEI22_TRACKING || {};
   var recaptchaSiteKey = config.recaptchaSiteKey || '';
-  var submitEndpoint = config.submitEndpoint || '/api/submit-form';
+  var web3formsAccessKey = config.web3formsAccessKey || '';
+  var submitEndpoint = config.submitEndpoint || 'https://api.web3forms.com/submit';
   var minFillTimeMs = config.minFillTimeMs || 3000;
   var recaptchaLoadQueue = [];
   var recaptchaScriptRequested = false;
@@ -308,9 +309,16 @@
       }
     }
 
+    if (!web3formsAccessKey) {
+      showError(
+        form,
+        'Form delivery is not configured. Please contact us on WhatsApp or email.'
+      );
+      return;
+    }
+
     var email = getFieldValue(form, ['Email', 'email']);
     var phone = getFieldValue(form, ['Phone', 'phone']);
-    var captchaTokenForSubmit = recaptchaSiteKey ? getRecaptchaResponse(form) : '';
 
     var submitBtn = form.querySelector('button[type="submit"]');
     var submitTextEl = submitBtn ? submitBtn.querySelector('.t-btnflex__text') : null;
@@ -331,6 +339,7 @@
     }
 
     var payload = {
+      access_key: web3formsAccessKey,
       name: getFieldValue(form, ['Name', 'name']),
       email: email,
       phone: phone,
@@ -339,13 +348,8 @@
       from_name: config.fromName || 'kei22.com',
       page_url: window.location.href,
       form_id: form.id || form.getAttribute('name') || 'contact',
-      website: getFieldValue(form, ['website']),
-      botcheck: !!(form.querySelector('[name="botcheck"]') || {}).checked
+      botcheck: false
     };
-
-    if (recaptchaSiteKey) {
-      payload['g-recaptcha-response'] = captchaTokenForSubmit;
-    }
 
     fetch(submitEndpoint, {
       method: 'POST',
@@ -369,20 +373,13 @@
         });
       })
       .then(function (result) {
-        if (result.data.success) {
+        if (result.status === 200 && result.data.success) {
           showSuccess(form);
           return;
         }
 
         var message = result.data.message;
-        if (!message && result.status === 404) {
-          message = 'Form API is unavailable. Please redeploy the site on Vercel.';
-        } else if (!message && result.status === 503) {
-          message =
-            'Form delivery is not configured on the server. Please contact us on WhatsApp or email.';
-        } else if (!message && result.status === 400) {
-          message = 'Could not send the form. Please check the captcha and try again.';
-        } else if (!message) {
+        if (!message) {
           message = 'Could not send the form. Please try again.';
         }
 
