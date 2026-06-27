@@ -10,7 +10,13 @@ function getClientIp(req) {
   if (forwarded) {
     return String(forwarded).split(',')[0].trim();
   }
-  return req.headers['x-real-ip'] || req.socket?.remoteAddress || 'unknown';
+  if (req.headers['x-real-ip']) {
+    return String(req.headers['x-real-ip']);
+  }
+  if (req.socket && req.socket.remoteAddress) {
+    return req.socket.remoteAddress;
+  }
+  return 'unknown';
 }
 
 function isRateLimited(ip) {
@@ -23,11 +29,7 @@ function isRateLimited(ip) {
   }
 
   record.count += 1;
-  if (record.count > RATE_LIMIT_MAX) {
-    return true;
-  }
-
-  return false;
+  return record.count > RATE_LIMIT_MAX;
 }
 
 function jsonResponse(res, status, body) {
@@ -36,37 +38,67 @@ function jsonResponse(res, status, body) {
   res.end(JSON.stringify(body));
 }
 
-async function readJsonBody(req) {
-  if (req.body && typeof req.body === 'object') {
-    return req.body;
+function readJsonBody(req) {
+  if (req.body !== undefined && req.body !== null) {
+    if (typeof req.body === 'string') {
+      if (!req.body.trim()) {
+        return Promise.resolve({});
+      }
+      return Promise.resolve(JSON.parse(req.body));
+    }
+    if (typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
+      return Promise.resolve(req.body);
+    }
   }
 
-  var chunks = [];
-  for await (var chunk of req) {
-    chunks.push(chunk);
-  }
-  var raw = Buffer.concat(chunks).toString('utf8');
-  if (!raw) {
-    return {};
-  }
-  return JSON.parse(raw);
+  return new Promise(function (resolve, reject) {
+    var data = '';
+
+    req.on('data', function (chunk) {
+      data += chunk;
+    });
+
+    req.on('end', function () {
+      if (!data) {
+        resolve({});
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(data));
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    req.on('error', reject);
+  });
 }
 
 async function verifyRecaptcha(secret, token, remoteip) {
-  var params = new URLSearchParams();
-  params.set('secret', secret);
-  params.set('response', token);
-  if (remoteip) {
-    params.set('remoteip', remoteip);
+  try {
+    var params = new URLSearchParams();
+    params.set('secret', secret);
+    params.set('response', token);
+    if (remoteip) {
+      params.set('remoteip', remoteip);
+    }
+
+    var response = await fetch(RECAPTCHA_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
+    });
+
+    if (!response.ok) {
+      return { success: false, 'error-codes': ['bad-request'] };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('recaptcha verify failed:', error);
+    return { success: false, 'error-codes': ['bad-request'] };
   }
-
-  var response = await fetch(RECAPTCHA_VERIFY_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params.toString()
-  });
-
-  return response.json();
 }
 
 function captchaErrorMessage(result) {
@@ -80,9 +112,6 @@ function captchaErrorMessage(result) {
   }
   if (codes.indexOf('timeout-or-duplicate') !== -1) {
     return 'Captcha was already used. Please check the box again and resubmit.';
-  }
-  if (codes.indexOf('bad-request') !== -1) {
-    return 'Captcha request was invalid. Please try again.';
   }
 
   return 'Captcha verification failed. Please try again.';
@@ -98,7 +127,7 @@ function isHoneypotTriggered(body) {
   return false;
 }
 
-module.exports = async function handler(req, res) {
+async function handleSubmit(req, res) {
   if (req.method === 'OPTIONS') {
     res.setHeader('Allow', 'POST, OPTIONS');
     res.statusCode = 204;
@@ -189,22 +218,42 @@ module.exports = async function handler(req, res) {
     botcheck: false
   };
 
-  try {
-    var web3formsResponse = await fetch(WEB3FORMS_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      },
-      body: JSON.stringify(web3formsPayload)
-    });
+  var web3formsResponse = await fetch(WEB3FORMS_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
+    },
+    body: JSON.stringify(web3formsPayload)
+  });
 
-    var web3formsData = await web3formsResponse.json();
-    jsonResponse(res, web3formsResponse.ok ? 200 : 502, web3formsData);
+  var web3formsText = await web3formsResponse.text();
+  var web3formsData = {};
+
+  if (web3formsText) {
+    try {
+      web3formsData = JSON.parse(web3formsText);
+    } catch (error) {
+      console.error('web3forms invalid json:', web3formsText.slice(0, 200));
+      jsonResponse(res, 502, {
+        success: false,
+        message: 'Could not send the form. Please try again.'
+      });
+      return;
+    }
+  }
+
+  jsonResponse(res, web3formsResponse.ok ? 200 : 502, web3formsData);
+}
+
+module.exports = async function handler(req, res) {
+  try {
+    await handleSubmit(req, res);
   } catch (error) {
-    jsonResponse(res, 502, {
+    console.error('submit-form crashed:', error);
+    jsonResponse(res, 500, {
       success: false,
-      message: 'Could not send the form. Please try again.'
+      message: 'Server error. Please try again later.'
     });
   }
-}
+};
