@@ -24,6 +24,7 @@
   }
 
   function showSuccess(form) {
+    hideErrors(form);
     var box = form.querySelector('.js-successbox');
     if (box) {
       box.style.display = 'block';
@@ -36,24 +37,48 @@
     trackLeadConversion();
   }
 
+  function ensureFormErrorBox(form) {
+    var box = form.querySelector('.kei22-form-error');
+    if (box) {
+      return box;
+    }
+
+    var submitWrap = form.querySelector('.t-form__submit');
+    if (!submitWrap || !submitWrap.parentNode) {
+      return null;
+    }
+
+    box = document.createElement('div');
+    box.className = 'kei22-form-error';
+    box.setAttribute('role', 'alert');
+    box.hidden = true;
+    submitWrap.parentNode.insertBefore(box, submitWrap);
+    return box;
+  }
+
   function hideErrors(form) {
     var boxes = form.querySelectorAll('.js-errorbox-all');
     for (var i = 0; i < boxes.length; i++) {
       boxes[i].style.display = 'none';
     }
+
+    var customBox = form.querySelector('.kei22-form-error');
+    if (customBox) {
+      customBox.hidden = true;
+      customBox.textContent = '';
+    }
   }
 
   function showError(form, message) {
-    var box = form.querySelector('.js-errorbox-all');
-    if (!box) {
-      alert(message);
+    var customBox = ensureFormErrorBox(form);
+    if (customBox) {
+      customBox.textContent = message;
+      customBox.hidden = false;
+      customBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       return;
     }
-    box.style.display = 'block';
-    var item = box.querySelector('.js-rule-error-all');
-    if (item) {
-      item.textContent = message;
-    }
+
+    alert(message);
   }
 
   function getFieldValue(form, names) {
@@ -285,6 +310,7 @@
 
     var email = getFieldValue(form, ['Email', 'email']);
     var phone = getFieldValue(form, ['Phone', 'phone']);
+    var captchaTokenForSubmit = recaptchaSiteKey ? getRecaptchaResponse(form) : '';
 
     var submitBtn = form.querySelector('button[type="submit"]');
     var submitTextEl = submitBtn ? submitBtn.querySelector('.t-btnflex__text') : null;
@@ -318,7 +344,7 @@
     };
 
     if (recaptchaSiteKey) {
-      payload['g-recaptcha-response'] = getRecaptchaResponse(form);
+      payload['g-recaptcha-response'] = captchaTokenForSubmit;
     }
 
     fetch(submitEndpoint, {
@@ -330,8 +356,16 @@
       body: JSON.stringify(payload)
     })
       .then(function (response) {
-        return response.json().then(function (data) {
-          return { ok: response.ok, data: data };
+        return response.text().then(function (text) {
+          var data = {};
+          if (text) {
+            try {
+              data = JSON.parse(text);
+            } catch (error) {
+              data = {};
+            }
+          }
+          return { ok: response.ok, status: response.status, data: data, text: text };
         });
       })
       .then(function (result) {
@@ -339,7 +373,20 @@
           showSuccess(form);
           return;
         }
-        showError(form, result.data.message || 'Could not send the form. Please try again.');
+
+        var message = result.data.message;
+        if (!message && result.status === 404) {
+          message = 'Form API is unavailable. Please redeploy the site on Vercel.';
+        } else if (!message && result.status === 503) {
+          message =
+            'Form delivery is not configured on the server. Please contact us on WhatsApp or email.';
+        } else if (!message && result.status === 400) {
+          message = 'Could not send the form. Please check the captcha and try again.';
+        } else if (!message) {
+          message = 'Could not send the form. Please try again.';
+        }
+
+        showError(form, message);
         resetRecaptcha(form);
       })
       .catch(function () {
@@ -365,6 +412,7 @@
     form.setAttribute('data-kei22-loaded-at', String(Date.now()));
     ensureHoneypotFields(form);
     ensureRecaptcha(form);
+    ensureFormErrorBox(form);
     setRequiredFields(form);
 
     form.addEventListener(

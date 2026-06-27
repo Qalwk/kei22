@@ -49,7 +49,9 @@ Edit `js/site-config.js`:
 - `recaptchaSiteKey` — public reCAPTCHA v2 site key for `kei22.com`
 - `KEI22_BOTFAQTOR.scriptSrc` — script URL copied from Botfaqtor dashboard (Settings → Install counter)
 
-Register reCAPTCHA keys at https://www.google.com/recaptcha/admin (type: **v2 checkbox**). Add domains: `kei22.com`, `www.kei22.com`, `localhost`.
+Register reCAPTCHA keys at https://www.google.com/recaptcha/admin (type: **v2 checkbox**). Add domains: `kei22.com`, `www.kei22.com`, `kei222.com`, `www.kei222.com`, `localhost`.
+
+After deploy, verify in Vercel → **Settings → Environment Variables** that both `WEB3FORMS_ACCESS_KEY` and `RECAPTCHA_SECRET_KEY` are set for **Production**.
 
 ### Cloudflare (recommended)
 

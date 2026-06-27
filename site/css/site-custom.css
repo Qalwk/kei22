@@ -193,6 +193,27 @@ form[data-kei22-form] .t-form__errorbox-wrapper {
   border-radius: 12px;
 }
 
+form[data-kei22-form] .js-errorbox-all {
+  display: none !important;
+}
+
+.kei22-form-error {
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f95d51;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.45;
+  text-align: center;
+}
+
+form[data-kei22-form] .t-form__successbox {
+  background: #e8f8f0;
+  color: #145c32;
+}
+
 .kei22-hp {
   position: absolute !important;
   left: -9999px !important;

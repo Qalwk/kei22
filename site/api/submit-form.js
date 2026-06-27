@@ -69,7 +69,24 @@ async function verifyRecaptcha(secret, token, remoteip) {
   return response.json();
 }
 
-function isHoneypotTriggered(body) {
+function captchaErrorMessage(result) {
+  var codes = result && result['error-codes'] ? result['error-codes'] : [];
+
+  if (codes.indexOf('invalid-input-secret') !== -1) {
+    return 'Server captcha secret is invalid. Check RECAPTCHA_SECRET_KEY in Vercel.';
+  }
+  if (codes.indexOf('invalid-input-response') !== -1) {
+    return 'Captcha expired. Please check the box again and resubmit.';
+  }
+  if (codes.indexOf('timeout-or-duplicate') !== -1) {
+    return 'Captcha was already used. Please check the box again and resubmit.';
+  }
+  if (codes.indexOf('bad-request') !== -1) {
+    return 'Captcha request was invalid. Please try again.';
+  }
+
+  return 'Captcha verification failed. Please try again.';
+}
   if (body.botcheck) {
     return true;
   }
@@ -123,9 +140,9 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  var recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+  var recaptchaSecret = (process.env.RECAPTCHA_SECRET_KEY || '').trim();
   if (recaptchaSecret) {
-    var captchaToken = body['g-recaptcha-response'];
+    var captchaToken = String(body['g-recaptcha-response'] || '').trim();
     if (!captchaToken) {
       jsonResponse(res, 400, {
         success: false,
@@ -138,7 +155,7 @@ module.exports = async function handler(req, res) {
     if (!captchaResult.success) {
       jsonResponse(res, 400, {
         success: false,
-        message: 'Captcha verification failed. Please try again.'
+        message: captchaErrorMessage(captchaResult)
       });
       return;
     }
