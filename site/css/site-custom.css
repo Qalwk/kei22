@@ -55,7 +55,7 @@ form[data-kei22-form] .t-input-block {
 }
 
 form[data-kei22-form] .t-input,
-form[data-kei22-form] textarea {
+form[data-kei22-form] textarea:not([name="g-recaptcha-response"]):not([id^="g-recaptcha-response"]) {
   display: block !important;
   width: 100% !important;
   max-width: none !important;
@@ -73,7 +73,7 @@ form[data-kei22-form] textarea {
   outline: none !important;
 }
 
-form[data-kei22-form] textarea {
+form[data-kei22-form] textarea:not([name="g-recaptcha-response"]):not([id^="g-recaptcha-response"]) {
   height: 128px !important;
   min-height: 128px !important;
   padding-top: 16px !important;
@@ -82,8 +82,24 @@ form[data-kei22-form] textarea {
   resize: vertical;
 }
 
+form[data-kei22-form] textarea[name="g-recaptcha-response"],
+form[data-kei22-form] textarea[id^="g-recaptcha-response"] {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
 form[data-kei22-form] .t-input:focus,
-form[data-kei22-form] textarea:focus {
+form[data-kei22-form] textarea:not([name="g-recaptcha-response"]):not([id^="g-recaptcha-response"]):focus {
   border-color: #259da8 !important;
   box-shadow: 0 0 0 4px rgba(37, 157, 168, 0.14) !important;
 }

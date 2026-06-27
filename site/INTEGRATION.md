@@ -22,20 +22,58 @@ Project folder: `C:\Users\tema\Downloads\kei22\site`
 
 ## Forms
 
-Requests are sent to **kustovaestatei1182@gmail.com** through Web3Forms.
+Requests are sent to **kustovaestatei1182@gmail.com** through Web3Forms via the serverless endpoint `/api/submit-form`.
 
-The access key is configured in `js/site-config.js`.
+### Bot protection
+
+The site uses layered protection:
+
+- Honeypot fields and minimum fill time (client-side)
+- Google reCAPTCHA v2 (optional until keys are configured)
+- Rate limiting on `/api/submit-form`
+- Optional Botfaqtor traffic analysis script
+
+### Required Vercel environment variables
+
+Set these in the Vercel project dashboard before production deploy:
+
+| Variable | Description |
+|----------|-------------|
+| `WEB3FORMS_ACCESS_KEY` | Web3Forms access key (moved off the client) |
+| `RECAPTCHA_SECRET_KEY` | Google reCAPTCHA v2 secret key |
+
+### Client configuration
+
+Edit `js/site-config.js`:
+
+- `recaptchaSiteKey` — public reCAPTCHA v2 site key for `kei22.com`
+- `KEI22_BOTFAQTOR.scriptSrc` — script URL copied from Botfaqtor dashboard (Settings → Install counter)
+
+Register reCAPTCHA keys at https://www.google.com/recaptcha/admin (type: **v2 checkbox**). Add domains: `kei22.com`, `www.kei22.com`, `localhost`.
+
+### Cloudflare (recommended)
+
+1. Move DNS for `kei22.com` to Cloudflare.
+2. Enable proxy (orange cloud) for web records.
+3. Turn on **Bot Fight Mode** under Security → Bots.
+4. Use **Full (strict)** SSL mode.
 
 ## Local Preview
 
-Use a local static server for form and asset testing:
+Use Vercel dev so the form API works locally:
 
 ```bash
-cd C:\Users\tema\Downloads\kei22\site
+cd site
+npx vercel dev
+```
+
+Plain static preview without the API:
+
+```bash
 npx serve .
 ```
 
-Open: http://localhost:3000
+Forms will fail on `npx serve .` until you use `vercel dev` or deploy to Vercel.
 
 ## Deploy
 
