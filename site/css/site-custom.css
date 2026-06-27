@@ -177,6 +177,24 @@ form[data-kei22-form] .t-form__errorbox-wrapper {
   border-radius: 12px;
 }
 
+.kei22-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.kei22-recaptcha {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 4px 0 12px;
+  min-height: 78px;
+}
+
 @media screen and (max-width: 640px) {
   form[data-kei22-form] {
     padding: 22px 16px;
