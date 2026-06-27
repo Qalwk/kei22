@@ -87,6 +87,8 @@ function captchaErrorMessage(result) {
 
   return 'Captcha verification failed. Please try again.';
 }
+
+function isHoneypotTriggered(body) {
   if (body.botcheck) {
     return true;
   }
