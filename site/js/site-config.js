@@ -1,7 +1,7 @@
-// Web3Forms access key (public): https://web3forms.com/
-// reCAPTCHA v2 site key (public): https://www.google.com/recaptcha/admin
+// web3formsAccessKey — UUID from https://web3forms.com/ (NOT from Google reCAPTCHA)
+// recaptchaSiteKey — "Site key" from https://www.google.com/recaptcha/admin
 window.KEI22_FORM_CONFIG = {
-  web3formsAccessKey: '6LcPCTgtAAAAAAC6JdSk9FMamND2yaiU0eOdp-jC',
+  web3formsAccessKey: 'f8f9a9ac-932a-4dfc-ae11-4a65e50da0e7',
   recaptchaSiteKey: '6LcPCTgtAAAAAAC6JdSk9FMamND2yaiU0eOdp-jC',
   submitEndpoint: 'https://api.web3forms.com/submit',
   formSubject: 'New property inquiry from kei22.com',
